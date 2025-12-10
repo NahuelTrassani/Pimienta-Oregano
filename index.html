@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pimienta & Orégano - Fábrica de Pastas</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>🍝 Pimienta & Orégano</h1>
+                <button class="carrito-btn" id="btnCarrito">
+                    🛒 Carrito
+                    <span class="badge" id="cantidadCarrito">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="filtros">
+            <h2>Categorías</h2>
+            <div class="botones-categoria" id="botonesCategoria">
+                <button class="btn-categoria activo" data-categoria="todos">Todos</button>
+                <button class="btn-categoria" data-categoria="fideos">Fideos</button>
+                <button class="btn-categoria" data-categoria="ñoquis">Ñoquis</button>
+                <button class="btn-categoria" data-categoria="lasagnas">Lasagnas</button>
+                <button class="btn-categoria" data-categoria="rellenas">Pastas Rellenas</button>
+                <button class="btn-categoria" data-categoria="saborizadas">Saborizadas</button>
+            </div>
+        </div>
+
+        <div class="productos-grid" id="productosGrid"></div>
+    </div>
+
+    <!-- Modal del carrito -->
+    <div class="modal" id="modalCarrito">
+        <div class="modal-contenido">
+            <div class="modal-header">
+                <h2>🛒 Tu Carrito</h2>
+                <button class="btn-cerrar" id="btnCerrar">✕</button>
+            </div>
+            <div class="mensaje-exito" id="mensajeExito">
+                ¡Compra realizada con éxito! Gracias por tu pedido.
+            </div>
+            <div id="carritoContenido"></div>
+        </div>
+    </div>
+
+    <script src="js/productos.js"></script>
+    <script src="js/carrito.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
