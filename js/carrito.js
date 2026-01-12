@@ -101,14 +101,15 @@ function mostrarCarrito() {
   const contenedor = document.getElementById("carritoContenido");
   const carrito = obtenerCarrito();
 
+  //cerrar modal si carrito vacio, avisando con un sweetalert
   if (carrito.length === 0) {
-    contenedor.innerHTML = `
-            <div class="carrito-vacio">
-                <p style="font-size: 3em;">🛒</p>
-                <p>Tu carrito está vacío</p>
-                <p>¡Agrega productos para comenzar!</p>
-            </div>
-        `;
+    Swal.fire({
+      icon: "warning",
+      title: "Se eliminaron todos los productos del carrito",
+      text: "Vuelva a agregar algunos productos antes de continuar.",
+      confirmButtonColor: "#667eea",
+    });
+    cerrarModal();
     return;
   }
 
@@ -150,30 +151,70 @@ function mostrarCarrito() {
 function finalizarCompra() {
   const carrito = obtenerCarrito();
 
+  //boton confirmar oculto por carrito vacio, no hace falta validar.
+  //warning con sweetalert
   if (carrito.length === 0) {
-    const mensaje = document.getElementById("mensajeExito");
-    mensaje.textContent = "⚠️ El carrito está vacío";
-    mensaje.style.backgroundColor = "#ff6b6b";
-    mensaje.classList.add("mostrar");
-    setTimeout(() => {
-      mensaje.classList.remove("mostrar");
-      mensaje.style.backgroundColor = "";
-      mensaje.textContent =
-        "¡Compra realizada con éxito! Gracias por tu pedido.";
-    }, 2000);
+    Swal.fire({
+      icon: "warning",
+      title: "El carrito está vacío",
+      text: "Agrega algunos productos antes de finalizar.",
+      confirmButtonColor: "#667eea",
+    });
     return;
   }
 
-  // Mostrar mensaje de éxito
-  const mensaje = document.getElementById("mensajeExito");
-  mensaje.classList.add("mostrar");
+  // Mostrar formulario de checkout
+  const contenedor = document.getElementById("carritoContenido");
 
-  // Vaciar el carrito
-  vaciarCarrito();
+  contenedor.innerHTML = `
+    <div class="checkout-form">
+        <h3>📦 Datos de Envío</h3>
+        <p>Ingresa tus datos para finalizar el pedido.</p>
+        
+        <form id="formCheckout" style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+            <input type="text" id="nombre" placeholder="Nombre Completo" value="Jhon Doe" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            <input type="email" id="email" placeholder="Correo Electrónico" value="correo@electronico.com" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            <input type="tel" id="telefono" placeholder="Teléfono" value="123456789" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            <input type="text" id="direccion" placeholder="Dirección" value="Calle siempre viva 123" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button type="button" onclick="mostrarCarrito()" class="btn-agregar" style="background-color: #718096;">Volver al carrito</button>
+                <button type="submit" class="btn-finalizar">Confirmar Compra</button>
+            </div>
+        </form>
+    </div>
+  `;
 
-  // Actualizar la vista
-  setTimeout(() => {
-    mostrarCarrito();
-    mensaje.classList.remove("mostrar");
-  }, 2000);
+  // Asignar el evento submit al form
+  document
+    .getElementById("formCheckout")
+    .addEventListener("submit", procesarPedido);
+}
+
+function procesarPedido(e) {
+  e.preventDefault(); // Evita recarga de página
+  const nombre = document.getElementById("nombre").value;
+
+  // Simula espera de servidor
+  Swal.fire({
+    title: "Procesando pago...",
+    text: "Aguarde un instante",
+    icon: "info",
+    allowOutsideClick: false,
+    showConfirmButton: false,
+    timer: 2000,
+    willClose: () => {
+      // Al terminar el timer: Mensaje de éxito
+      Swal.fire({
+        icon: "success",
+        title: "¡Compra Exitosa!",
+        text: `Gracias ${nombre}, tu pedido está en camino.`,
+        confirmButtonColor: "#38ef7d",
+      }).then(() => {
+        // Limpieza final
+        vaciarCarrito();
+        cerrarModal();
+      });
+    },
+  });
 }

@@ -1,6 +1,6 @@
 // Array de productos - Base de datos de la tienda
-const productos = [
-  // Fideos
+let productos = [];
+const backupProductos = [
   {
     id: 1,
     nombre: "Spaghetti Tradicional",
@@ -37,8 +37,6 @@ const productos = [
       "https://images.unsplash.com/photo-1622973536968-3ead9e780960?w=400&h=300&fit=crop",
     descripcion: "Espirales de colores, con espinaca y tomate",
   },
-
-  // Ñoquis
   {
     id: 5,
     nombre: "Ñoquis de Papa",
@@ -66,8 +64,6 @@ const productos = [
       "https://media.istockphoto.com/id/2240619232/photo/gnocchi-spinach-potato-dough-second-course-portion-size-natural-product-tasty-snack-fresh.jpg?s=2048x2048&w=is&k=20&c=dtjXmWtsDl-NmEayjaZNUAAcZNdyejyg0552hOKoBV0=",
     descripcion: "Ñoquis verdes con espinaca fresca",
   },
-
-  // Lasagnas
   {
     id: 8,
     nombre: "Placas de Lasagna",
@@ -86,8 +82,6 @@ const productos = [
       "https://images.unsplash.com/photo-1619895092538-128341789043?w=400&h=300&fit=crop",
     descripcion: "Placas de lasagna con espinaca",
   },
-
-  // Pastas Rellenas
   {
     id: 10,
     nombre: "Ravioles de Ricota",
@@ -124,8 +118,6 @@ const productos = [
       "https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?w=400&h=300&fit=crop",
     descripcion: "Pasta en forma de sombrero con carne",
   },
-
-  // Saborizadas
   {
     id: 14,
     nombre: "Tallarines de Remolacha",
@@ -154,6 +146,34 @@ const productos = [
     descripcion: "Pasta verde con albahaca fresca",
   },
 ];
+
+async function cargarProductos() {
+  try {
+    //fetch await para inicializar dedse el json
+    const response = await fetch("data/productos.json");
+    //valida la resp
+    if (!response.ok) {
+      throw new Error("Los productos no estan disponibles en este momento");
+    }
+    //parsea a json y await pq demora milisegundos
+    productos = await response.json();
+  } catch (error) {
+    //si hay error, usa el backup
+    productos = backupProductos;
+
+    //y muestra un toast con sweetalert2
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "bottom-end",
+      showConfirmButton: false,
+      timer: 3000,
+    });
+    Toast.fire({
+      icon: "info",
+      title: "Modo Offline: Usando datos locales",
+    });
+  }
+}
 
 // Función para obtener productos por categoría
 function obtenerProductosPorCategoria(categoria) {

@@ -61,6 +61,18 @@ function cambiarCategoria(categoria) {
 
 // Función para abrir el modal del carrito
 function abrirModal() {
+  //warning con sweetalert
+  const carrito = obtenerCarrito();
+  if (carrito.length === 0) {
+    Swal.fire({
+      icon: "warning",
+      title: "El carrito está vacío",
+      text: "Agrega algunos productos antes de continuar.",
+      confirmButtonColor: "#667eea",
+    });
+    return;
+  }
+
   const modal = document.getElementById("modalCarrito");
   modal.classList.add("activo");
   mostrarCarrito();
@@ -73,7 +85,9 @@ function cerrarModal() {
 }
 
 // Inicialización cuando el DOM está listo
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
+  // Cargar productos desde el JSON
+  await cargarProductos();
   // Renderizar productos iniciales
   renderizarProductos("todos");
 
@@ -91,6 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Event listener para abrir carrito
   const btnCarrito = document.getElementById("btnCarrito");
+
   btnCarrito.addEventListener("click", abrirModal);
 
   // Event listener para cerrar modal
